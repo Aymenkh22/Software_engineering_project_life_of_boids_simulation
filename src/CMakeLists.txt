@@ -1,0 +1,15 @@
+FIND_PACKAGE(glfw3 3.3 REQUIRED) 
+FIND_PACKAGE(glad REQUIRED)
+FIND_PACKAGE(OpenCV REQUIRED)
+FIND_PACKAGE(OpenMP REQUIRED)
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+add_library(libGLX "Utils/glx.cpp" "Utils/glx.hpp" "Agents/Agent.hpp" "Agents/Agent.cpp" "laws/laws.cpp" "laws/laws.hpp" "Utils/Display.h" "Utils/constants.hpp" "position/2DVec.hpp" "Utils/game.h" "kd_tree/kdTree.cpp" "kd_tree/kdTree.h" )
+target_compile_options(libGLX PRIVATE -Wall ${OpenMP_CXX_FLAGS})
+target_link_libraries(libGLX PUBLIC glfw::glfw glad::glad opencv::opencv OpenMP::OpenMP_CXX)
+
+add_executable(life-of-boids main.cpp  "Agents/Agent.hpp" "Agents/Agent.cpp" "laws/laws.cpp" "laws/laws.hpp"  "Utils/game.h" "kd_tree/kdTree.cpp" "kd_tree/kdTree.h")
+target_link_libraries(life-of-boids libGLX)
+add_executable(main_opencv main_opencv.cpp  "Agents/Agent.hpp" "Agents/Agent.cpp" "laws/laws.cpp" "laws/laws.hpp"  "Utils/game.h" "kd_tree/kdTree.cpp" "kd_tree/kdTree.h")
+target_link_libraries(main_opencv PRIVATE opencv::opencv)
+

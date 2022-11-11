@@ -1,0 +1,28 @@
+
+image: hpwxf/hpc-ai-2021:conan-clang10
+
+
+stages:
+    - build
+    - test
+
+build-stage:Release:
+    stage: build
+    script:
+        - echo "Building..."
+        - mkdir build
+        - cd build 
+        - conan install ..
+        - cmake -DCMAKE_TOOLCHAIN_FILE=conan_paths.cmake -DCMAKE_BUILD_TYPE=Release ..          
+        - cmake --build . 
+        
+    artifacts:
+        paths:
+            - build/
+
+test-stage:
+    stage: test
+    script:
+        - echo "Testing..."
+        - cd build
+        - ctest 
